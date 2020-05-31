@@ -90,27 +90,4 @@ def calcCompetitionResults(competitors_in_competitions):
 
     returned_list=(sumAllUp(timed_set,timed_dict))+(sumAllUp(untimed_set,untimed_dict))+(sumAllUp(knockout_set,knockout_dict))
 
-    return returned_list
-
-    
-
-def main():
-    my_list=[{'competition name': 'run', 'competition type': 'timed',
-        'competitor id': 324, 'competitor country': 'moroco',
-        'result': 5},{'competition name': "dance", 'competition type': 'untimed',
-    'competitor id': 67846, 'competitor country': 'israel',
-    'result': 0}
-    ,{'competition name': 'run', 'competition type': 'timed',
-    'competitor id': 4675, 'competitor country': 'swiss',
-    'result': 8},{'competition name': "football", 'competition type': 'knockout',
-    'competitor id': 67846, 'competitor country': 'israel',
-    'result': 1}
-    ]
-    print(calcCompetitionResults(my_list))
-
-if __name__ == "__main__":
-    
-    main() 
-
-
-       
+    return returned_list   
