@@ -1,0 +1,17 @@
+competitor 1234 Israel
+competition Basketball 1234 untimed 23
+competitor 1111 Nigeria
+competition Basketball 1111 untimed 1
+competitor 2222 USA
+competition Basketball 2222 untimed 10000
+competitor 3333 Spain
+competition Basketball 3333 untimed 52
+competitor 4444 Albania
+competition Basketball 4444 untimed 22
+competitor 1234 Israel
+competition WaterBasketball 1234 untimed 23
+competitor 1111 Nigeria
+competition WaterBasketball 1111 untimed 1
+competitor 2222 USA
+competition WaterBasketball 2222 untimed 10000
+competitor 3333 Spain
