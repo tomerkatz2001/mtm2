@@ -1,6 +1,5 @@
 
 
-
 def readParseData(file_name):
         file=open(file_name,'r')
         line=file.readline()
@@ -26,9 +25,9 @@ def readParseData(file_name):
                     item={}
                     item["competition name"]=data[1]
                     item["competition type"]=data[3]
-                    item["competitor id"]=data[2]
+                    item["competitor id"]=int(data[2])
                     item["competitor country"]=id_to_country[data[2]]
-                    item["result"]=data[4]
+                    item["result"]=int(data[4])
                     database.append(item)
             cheater=False
             line = file.readline()
@@ -139,3 +138,4 @@ def calcCompetitionResults(competitors_in_competitions):
 
 print(readParseData("2020.txt"))
 print(calcCompetitionResults(readParseData("2020.txt")))
+
