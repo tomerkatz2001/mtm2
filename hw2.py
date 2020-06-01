@@ -5,7 +5,6 @@ def readParseData(file_name):
         line=file.readline()
         id_to_country={}
         database=[]
-        cheater=False
         while line:
             data=line.split()
             if(data[0]=="competitor"):
@@ -17,19 +16,13 @@ def readParseData(file_name):
         while line:
             data=line.split()
             if(data[0]=="competition"):
-                for item in database:
-                    if(item["competitor id"]==int(data[2]) and item["competition name"]==data[1]):
-                        cheater=True
-                        database.remove(item)
-                if(not cheater):
-                    item={}
-                    item["competition name"]=data[1]
-                    item["competition type"]=data[3]
-                    item["competitor id"]=int(data[2])
-                    item["competitor country"]=id_to_country[data[2]]
-                    item["result"]=int(data[4])
-                    database.append(item)
-            cheater=False
+                item={}
+                item["competition name"]=data[1]
+                item["competition type"]=data[3]
+                item["competitor id"]=int(data[2])
+                item["competitor country"]=id_to_country[data[2]]
+                item["result"]=int(data[4])
+                database.append(item)
             line = file.readline()
 
         return database
@@ -52,7 +45,7 @@ def sumAllUp(type_set, type_dict):
             continue
         if (size == 1):
             sum_list.append(
-                [competition, type_dict[competition][0]["competitor country"], 'undef_country', 'undef_contry'])
+                [competition, type_dict[competition][0]["competitor country"], 'undef_country', 'undef_country'])
         if (size == 2):
             sum_list.append([competition, type_dict[competition][0]["competitor country"],
                              type_dict[competition][1]["competitor country"], 'undef_country'])
@@ -64,6 +57,14 @@ def sumAllUp(type_set, type_dict):
 
 
 def calcCompetitionsResults(competitors_in_competitions):
+    for item1 in competitors_in_competitions:
+        cheater=False
+        for item2 in competitors_in_competitions:
+            if( (not(item1 ==item2)) and item1["competitor id"]==item2["competitor id"] and item1["competition name"]==item2["competition name"]):
+                competitors_in_competitions.remove(item2)
+                cheater=True
+        if(cheater):
+                competitors_in_competitions.remove(item1)
     timed_list = []
     untimed_list = []
     knockout_list = []
@@ -152,7 +153,8 @@ def printCompetitor(competitor):
 
     assert (isinstance(result, int))  # Updated. Safety check for the type of result
 
-    print(f'Competitor {competitor_id} from {competitor_country} participated in {competition_name} ({competition_type}) and scored {result}')
+    print(
+        f'Competitor {competitor_id} from {competitor_country} participated in {competition_name} ({competition_type}) and scored {result}')
 
 
 def printCompetitionResults(competition_name, winning_gold_country, winning_silver_country, winning_bronze_country):
@@ -203,8 +205,8 @@ def partA(file_name='input.txt', allow_prints=True):
 
     return competitions_results
 
-import Olympics
 def partB(file_name='input.txt'):
+    import Olympics
     competitions_results = partA(file_name, allow_prints=False)
     olympic=Olympics.OlympicsCreate()
     for item in competitions_results:
@@ -223,7 +225,7 @@ if __name__ == "__main__":
     '''
     file_name = 'input.txt'
 
-    partA("2020.txt")
-    partB("2020.txt")
+    partA(file_name)
+    partB(file_name)
 
 
