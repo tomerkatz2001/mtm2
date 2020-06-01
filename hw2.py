@@ -20,7 +20,6 @@ def readParseData(file_name):
                 for item in database:
                     if(item["competitor id"]==int(data[2]) and item["competition name"]==data[1]):
                         cheater=True
-                        print("cheat")
                         database.remove(item)
                 if(not cheater):
                     item={}
@@ -32,7 +31,7 @@ def readParseData(file_name):
                     database.append(item)
             cheater=False
             line = file.readline()
-
+        file.close()
         return database
 
 
