@@ -57,7 +57,7 @@ def sumAllUp(type_set, type_dict):
         if (size == 2):
             sum_list.append([competition, type_dict[competition][0]["competitor country"],
                              type_dict[competition][1]["competitor country"], 'undef_country'])
-        if (size == 3):
+        if (size >= 3):
             sum_list.append([competition, type_dict[competition][0]["competitor country"],
                              type_dict[competition][1]["competitor country"],
                              type_dict[competition][2]["competitor country"]])
