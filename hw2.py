@@ -57,14 +57,19 @@ def sumAllUp(type_set, type_dict):
 
 
 def calcCompetitionsResults(competitors_in_competitions):
+    need_to_remove=[]
     for item1 in competitors_in_competitions:
         cheater=False
         for item2 in competitors_in_competitions:
             if( (not(item1 ==item2)) and item1["competitor id"]==item2["competitor id"] and item1["competition name"]==item2["competition name"]):
-                competitors_in_competitions.remove(item2)
+                if(not (item2 in need_to_remove)):
+                    need_to_remove.append(item2)
                 cheater=True
         if(cheater):
-                competitors_in_competitions.remove(item1)
+            if(not(item1 in need_to_remove)):
+                need_to_remove.append(item1)
+    for item in need_to_remove:
+        competitors_in_competitions.remove(item)
     timed_list = []
     untimed_list = []
     knockout_list = []
