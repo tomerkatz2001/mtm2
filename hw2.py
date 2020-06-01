@@ -1,39 +1,54 @@
 
 
 def readParseData(file_name):
-        file=open(file_name,'r')
+    '''
+    Reads a olympics database from a file
+    Arguments:
+        file_name- then name of the file to read the DB from.
+    Return:
+        The database- a list of dictionaries in this format: {'competition name': competition_name, 'competition type': competition_type,
+                        'competitor id': competitor_id, 'competitor country': competitor_country,
+                        'result': result}
+    '''
+    file=open(file_name,'r')#Open the file for reading
+    line=file.readline()#Read the first line
+    id_to_country={}#This is a dictionary that will be used to map competitor ids to their countries
+    database=[]#The list that will contain the database
+    while line:#Loop through each line, fine the lines that start with competitor and map the competitora ids to their country in the dictionary we created.
+        data=line.split()
+        if(data[0]=="competitor"):
+            id_to_country[data[1]]=data[2]
         line=file.readline()
-        id_to_country={}
-        database=[]
-        while line:
-            data=line.split()
-            if(data[0]=="competitor"):
-                id_to_country[data[1]]=data[2]
-            line=file.readline()
-        file.close()
-        file=open(file_name,'r')
-        line=file.readline()
-        while line:
-            data=line.split()
-            if(data[0]=="competition"):
-                item={}
-                item["competition name"]=data[1]
-                item["competition type"]=data[3]
-                item["competitor id"]=int(data[2])
-                item["competitor country"]=id_to_country[data[2]]
-                item["result"]=int(data[4])
-                database.append(item)
-            line = file.readline()
-        file.close()
-        return database
+    file.close()#Close and reopen the file
+    file=open(file_name,'r')
+    line=file.readline()
+    while line:#Loop through the file again, This time for each line that starts with competition add the data to the DB
+        data=line.split()
+        if(data[0]=="competition"):
+            item={}
+            item["competition name"]=data[1]
+            item["competition type"]=data[3]
+            item["competitor id"]=int(data[2])
+            item["competitor country"]=id_to_country[data[2]]
+            item["result"]=int(data[4])
+            database.append(item)
+        line = file.readline()
+    file.close()
+    return database#Return the DB
 
 
 
 def getNameOfCompetition(parameter_dict):
+    '''
+    This function gets a dictionary from the olympics DB list and returns the competition name
+    '''
     return parameter_dict["competition name"]
 
 
 def getScoreOfCompetition(dict):
+    '''
+    This function gets a dictionary from the olympics DB list and returns the result
+    '''
     return dict["result"]
 
 
@@ -57,15 +72,22 @@ def sumAllUp(type_set, type_dict):
 
 
 def calcCompetitionsResults(competitors_in_competitions):
-    need_to_remove=[]
-    for item1 in competitors_in_competitions:
-        cheater=False
-        for item2 in competitors_in_competitions:
-            if( (not(item1 ==item2)) and item1["competitor id"]==item2["competitor id"] and item1["competition name"]==item2["competition name"]):
-                if(not (item2 in need_to_remove)):
+    '''
+    This function sorts and calculates the results in a competition database
+    Arguments:
+        competitors_in_competitions- The database.
+    Return:
+        The final DB.
+    '''
+    need_to_remove=[]#A list that will contain all of the cheaters items from the DB.
+    for item1 in competitors_in_competitions:#Go through all of the items.
+        cheater=False#Reset the cheater flag
+        for item2 in competitors_in_competitions:#For each item go through all of the OTHER items
+            if( (not(item1 ==item2)) and item1["competitor id"]==item2["competitor id"] and item1["competition name"]==item2["competition name"]):#Check if they have the same competition name and competitor id
+                if(not (item2 in need_to_remove)):#If they do it means that a competitor is cheating, add the item to the list and set the cheater flag to True
                     need_to_remove.append(item2)
                 cheater=True
-        if(cheater):
+        if(cheater):#If the cheater flag is on then this item should also be removed.
             if(not(item1 in need_to_remove)):
                 need_to_remove.append(item1)
     for item in need_to_remove:
@@ -212,12 +234,12 @@ def partA(file_name='input.txt', allow_prints=True):
 
 def partB(file_name='input.txt'):
     import Olympics
-    competitions_results = partA(file_name, allow_prints=False)
-    olympic=Olympics.OlympicsCreate()
-    for item in competitions_results:
+    competitions_results = partA(file_name, allow_prints=False)#Get the results from PART A
+    olympic=Olympics.OlympicsCreate()#Create an olympics structure
+    for item in competitions_results:#Insert the items from the results list to the olympics struct
         Olympics.OlympicsUpdateCompetitionResults(olympic,str(item[1]),str(item[2]),str(item[3]))
-    Olympics.OlympicsWinningCountry(olympic)
-    Olympics.OlympicsDestroy(olympic)
+    Olympics.OlympicsWinningCountry(olympic)#Calculate the olympics results
+    Olympics.OlympicsDestroy(olympic)#Delete the olympics structure
     # TODO Part B
 
 
