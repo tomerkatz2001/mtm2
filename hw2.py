@@ -24,7 +24,7 @@ def readParseData(file_name):
                 item["result"]=int(data[4])
                 database.append(item)
             line = file.readline()
-
+        file.close()
         return database
 
 
