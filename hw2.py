@@ -53,8 +53,14 @@ def getScoreOfCompetition(dict):
 
 
 def sumAllUp(type_set, type_dict):
+    '''
+    This method gets a dict and returns the results of the competitions(a list of the top 3 countries)
+    Arguments:
+        type_set- A set of all of the competitions from this type.
+        type_dict- A dictionary of this competition type, mapping each competition to the competitors, sorted by results.
+    '''
     sum_list = []
-    for competition in type_set:
+    for competition in type_set:#For each competition, add a list of the top 3 countries to the list, if there is less the 3 countries, add undef_country as countries.
         size = len(type_dict[competition])
         if (size == 0):
             continue
@@ -68,7 +74,7 @@ def sumAllUp(type_set, type_dict):
             sum_list.append([competition, type_dict[competition][0]["competitor country"],
                              type_dict[competition][1]["competitor country"],
                              type_dict[competition][2]["competitor country"]])
-    return sum_list
+    return sum_list#Return the final list
 
 
 def calcCompetitionsResults(competitors_in_competitions):
@@ -77,7 +83,7 @@ def calcCompetitionsResults(competitors_in_competitions):
     Arguments:
         competitors_in_competitions- The database.
     Return:
-        The final DB.
+        returned_list- The results list.
     '''
     need_to_remove=[]#A list that will contain all of the cheaters items from the DB.
     for item1 in competitors_in_competitions:#Go through all of the items.
@@ -90,13 +96,14 @@ def calcCompetitionsResults(competitors_in_competitions):
         if(cheater):#If the cheater flag is on then this item should also be removed.
             if(not(item1 in need_to_remove)):
                 need_to_remove.append(item1)
-    for item in need_to_remove:
+    for item in need_to_remove:#Remove all of the items that we marked to be removed.
         competitors_in_competitions.remove(item)
-    timed_list = []
-    untimed_list = []
-    knockout_list = []
+
+    timed_list = []#A list for the timed competitions
+    untimed_list = []#A list for untimed competitions
+    knockout_list = []#A list for knockout competitions
     competitions_set = set()
-    for element in competitors_in_competitions:
+    for element in competitors_in_competitions:#Sort the elements into the list they fit into
         competitions_set.add(element["competition name"])
         if (element["competition type"] == "timed"):
             timed_list.append(element)
@@ -109,59 +116,62 @@ def calcCompetitionsResults(competitors_in_competitions):
     untimed_set = set()
     knockout_set = set()
 
+    # Sort the lists by name and insert them into the sets, creating sets of the competitions.
     new_list1 = sorted(timed_list, key=getNameOfCompetition)
     timed_list = new_list1
-    for competiton in timed_list:
-        timed_set.add(competiton["competition name"])
+    for competition in timed_list:
+        timed_set.add(competition["competition name"])
 
     new_list2 = sorted(untimed_list, key=getNameOfCompetition)
     untimed_list = new_list2
-    for competiton in untimed_list:
-        untimed_set.add(competiton["competition name"])
+    for competition in untimed_list:
+        untimed_set.add(competition["competition name"])
 
     new_list3 = sorted(knockout_list, key=getNameOfCompetition)
     knockout_list = new_list3
-    for competiton in knockout_list:
-        knockout_set.add(competiton["competition name"])
+    for competition in knockout_list:
+        knockout_set.add(competition["competition name"])
 
     timed_dict = {}
     untimed_dict = {}
     knockout_dict = {}
 
-    for competiton in timed_set:
-        timed_dict[competiton] = []
-        for competetor in timed_list:
-            if (competetor["competition name"] == competiton):
-                timed_dict[competiton].append(competetor)
+    #For each dictionary, use the competitions as keys and a list of competitors as values
+    for competition in timed_set:
+        timed_dict[competition] = []
+        for competitor in timed_list:
+            if (competitor["competition name"] == competition):
+                timed_dict[competition].append(competitor)
 
-    for competiton in untimed_set:
-        untimed_dict[competiton] = []
-        for competetor in untimed_list:
-            if (competetor["competition name"] == competiton):
-                untimed_dict[competiton].append(competetor)
+    for competition in untimed_set:
+        untimed_dict[competition] = []
+        for competitor in untimed_list:
+            if (competitor["competition name"] == competition):
+                untimed_dict[competition].append(competitor)
 
-    for competiton in knockout_set:
-        knockout_dict[competiton] = []
-        for competetor in knockout_list:
-            if (competetor["competition name"] == competiton):
-                knockout_dict[competiton].append(competetor)
+    for competition in knockout_set:
+        knockout_dict[competition] = []
+        for competitor in knockout_list:
+            if (competitor["competition name"] == competition):
+                knockout_dict[competition].append(competitor)
 
-    for competiton in timed_set:
-        new_list4 = sorted(timed_dict[competiton], key=getScoreOfCompetition)
-        timed_dict[competiton] = new_list4
+    #For each list, sort it by the results according to its type.
+    for competition in timed_set:
+        new_list4 = sorted(timed_dict[competition], key=getScoreOfCompetition)
+        timed_dict[competition] = new_list4
 
-    for competiton in untimed_set:
-        new_list5 = sorted(untimed_dict[competiton], key=getScoreOfCompetition, reverse=True)
-        untimed_dict[competiton] = new_list5
+    for competition in untimed_set:
+        new_list5 = sorted(untimed_dict[competition], key=getScoreOfCompetition, reverse=True)
+        untimed_dict[competition] = new_list5
 
-    for competiton in knockout_set:
-        new_list6 = sorted(knockout_dict[competiton], key=getScoreOfCompetition)
-        knockout_dict[competiton] = new_list6
+    for competition in knockout_set:
+        new_list6 = sorted(knockout_dict[competition], key=getScoreOfCompetition)
+        knockout_dict[competition] = new_list6
 
     returned_list = (sumAllUp(timed_set, timed_dict)) + (sumAllUp(untimed_set, untimed_dict)) + (
-    sumAllUp(knockout_set, knockout_dict))
+    sumAllUp(knockout_set, knockout_dict))#Call the sumAllUp fucntion to sum up the results.
 
-    return returned_list
+    return returned_list#Return the final list
 
 
 def printCompetitor(competitor):
